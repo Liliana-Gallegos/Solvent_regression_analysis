@@ -13,6 +13,15 @@ The descriptors include:
 
 
 ### Showcased Results:
+<img src="PCA.png" style="margin:auto" width="500"/>
+<p style="text-align: center">
+    <b>Figure a. PCA plot</b>
+</p>
+
+<img src="MVR.png" style="margin:auto" width="500"/>
+<p style="text-align: center">
+    <b>Fibure b. MV linear regression model</b>
+</p>
 
 
 ### References:
