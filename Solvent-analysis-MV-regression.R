@@ -18,7 +18,7 @@ library(Metrics)  # rmse and mae
 
 
 ## 2. Load data
-# setwd("/Volumes/Working-Yoshi/Research/Solvent/Solvent-updated")
+getwd()
 all_labels <-read.csv("Keq-solvents-pca-split.csv", header=TRUE, sep = ",")   # Keq-solvents-updated.csv
 data_all_unsc <- subset(all_labels, select = -solvent ) # all data
 nododecane_labels <- all_labels[-c(2), ] ## No dodecane data
@@ -37,11 +37,11 @@ names(data_all)[names(data_all) == "data_all_numeric$dG"] <- "dG"
 names(data_nododecane)[names(data_nododecane) == "data_nododecane_numeric$dG"] <- "dG"
 
 
-## 3. (a) Figure S33 - Correlation plot using the Pearson algorithm on All data
+## 3. (a) Figure S34 - Correlation plot using the Pearson algorithm on All data
 cov1 = cov(data_all)
 corr <- round(cor(data_all), 2)
 res <- cor.mtest(data_all, conf.level = .95)
-png(file = "figureS33.png",width = 200, height = 200, pointsize = 18, units='mm', res = 300)
+png(file = "figureS34.png",width = 200, height = 200, pointsize = 18, units='mm', res = 300)
 corrplot <- corrplot(corr, p.mat = res$p, sig.level = c(.001, .01, .05), pch.cex = .7,
                      insig = "label_sig", pch.col = "white", type = "upper", 
                      order = "hclust", tl.col = "black", tl.srt = 45, 
@@ -50,7 +50,7 @@ dev.off()
 r2_values = round(corr^2, 2)
 print(r2_values)  # shows pairwise R2-correlations to each variable
 
-## (b) Figure S34 - Highest correlations to response: Sig2, beta, and gamma. V-descriptor plotted for comparison. 
+## (b) Figure S35 - Highest correlations to response: Sig2, beta, and gamma. V-descriptor plotted for comparison. 
 Sig2_plot <- ggplot(data_all, aes(data_all$Sig2, data_all$dG)) + geom_point() +
   xlab("Sig2") + ylab(" \u2206G (kcal/mol)")+ ggtitle( paste("\u2206G ~ Sig2  \nR2 =", r2_values[1,14]) ) + stat_smooth(method = "lm", se=FALSE,col= "black") + theme_bw(); Sig2_plot 
 
@@ -70,8 +70,8 @@ gamma_plot <- ggplot(data_all, aes(data_all$gamma, data_all$dG)) + geom_point() 
         axis.ticks.y = element_blank()); gamma_plot
 
 theme_set(theme_cowplot(font_size=12))
-FigS34 <- plot_grid(Sig2_plot, beta_plot, V_plot, gamma_plot, align = "h"); FigS34
-# save_plot("figureS34.jpeg", FigS34, ncol = 2, nrow = 2)
+FigS35 <- plot_grid(Sig2_plot, beta_plot, V_plot, gamma_plot, align = "h"); FigS35
+# save_plot("figureS35.jpeg", FigS35, ncol = 2, nrow = 2)
 
 
 ## 4. Select best model
@@ -93,7 +93,7 @@ all_models <- dredge(full_model, extra = c("R^2", F = function(x)
 
 top3 = head(all_models, 3); top3 # shows top 3 models 
 
-## (c) Table S18 - Calculates variable importance for ALL possible models
+## (c) Table S19 - Calculates variable importance for ALL possible models
 ## Weights and and Number of times the descriptors shown in the models
 importance(all_models)  
 
@@ -109,7 +109,7 @@ model6 <- lm(dG ~ Sig2 + area + V, data=data_nododecane); #summary(model6)
 model7 <- lm(dG ~ Sig2 + V, data=data_nododecane); #summary(model7)
 model8 <- lm(dG ~ Sig2 + MV_boltz, data=data_nododecane); #summary(model8)
 
-## (e) Table S17 - R2 and RMSE of All models
+## (e) Table S18 - R2 and RMSE of All models
 r2 <- function(model) {
   rr <- summary(model)$r.squared
   return(signif(rr,2)) }
@@ -137,11 +137,11 @@ for (i in 1:8) {
   mae_list[[i]] <- MAE(nam)
   rr_list[[i]] <- r2(nam)
 }; 
-Table_S17 = tibble(model_list, rr_list, rmse_list, mae_list); Table_S17
-# write.csv(Table_S17, "TableS17.csv", row.names = FALSE)
+Table_S18 = tibble(model_list, rr_list, rmse_list, mae_list); Table_S18
+# write.csv(Table_S18, "TableS18.csv", row.names = FALSE)
 
 ## 5. Select best Train-to-Test split 
-## Table S20 - Compare R2 and RMSE values in different PCA clusters
+## Table S21 - Compare R2 and RMSE values in different PCA clusters
 cluster <- c()
 formula <- c()
 R2_train <- c()
@@ -196,34 +196,34 @@ for (i in 5:14) {
   Q2_test[[i]] <- signif(result_q2@result[["pred"]][["q2"]], 2)
   Q2_rmse[[i]] <- signif(result_q2@result[["pred"]][["rmse"]], 2)
 }
-Table_S20 = na.omit(tibble(cluster, formula, R2_train, R2_rmse, Q2_test, Q2_rmse)); Table_S20
-# write.csv(Table_S20, "TableS20.csv", row.names = FALSE)  # save to csv
+Table_S21 = na.omit(tibble(cluster, formula, R2_train, R2_rmse, Q2_test, Q2_rmse)); Table_S21
+# write.csv(Table_S201 "TableS21.csv", row.names = FALSE)  # save to csv
 
 
-## 6. Final analysis based on Best model and Best Train:Test split
-# f = sapply(data_all_unsc, levels)  # SHOW the levels for categorical variables
-# sample_split = 'X12.k_clusters'   # SELECT sample column to split by
-# 
-# data_presplit <- split(data_all_unsc, data_all_unsc [sample_split])
-# data_tr2 <- data_presplit[["TRAIN"]]
-# data_tt2 <- data_presplit[["TEST"]]
-# 
-# data_tr <- select_if(data_tr2, is.numeric) 
-# data_tt <- select_if(data_tt2, is.numeric) 
-# 
-# datatr_x <- select(data_tr, select = -c("dG")) # keep only x-variables
-# datatt_x <- select(data_tt, select = -c("dG")) # keep only x-variables
-# datatr_y <- data_tr["dG"]
-# 
-# ## Standardize Train and Test data sets
-# trainMean <- apply(datatr_x,2,mean) # Test dataset based on Train's mean
-# trainSd <- apply(datatr_x,2,sd)  # Test dataset based on Train's standard deviation
-# datatr_scaled <- sweep(sweep(datatr_x, 2L, trainMean), 2, trainSd, "/")
-# data <- cbind(datatr_y,datatr_scaled )
-# 
-# datatt_y <- data_tt["dG"]
-# datatt_scaled <- sweep(sweep(datatt_x, 2L, trainMean), 2, trainSd, "/") 
-# data_tt <- cbind(datatt_y,datatt_scaled ) 
+# 6. Final analysis based on Best model and Best Train:Test split
+f = sapply(data_all_unsc, levels)  # SHOW the levels for categorical variables
+sample_split = 'X12.k_clusters'   # SELECT sample column to split by
+
+data_presplit <- split(data_all_unsc, data_all_unsc [sample_split])
+data_tr2 <- data_presplit[["TRAIN"]]
+data_tt2 <- data_presplit[["TEST"]]
+
+data_tr <- select_if(data_tr2, is.numeric)
+data_tt <- select_if(data_tt2, is.numeric)
+
+datatr_x <- select(data_tr, select = -c("dG")) # keep only x-variables
+datatt_x <- select(data_tt, select = -c("dG")) # keep only x-variables
+datatr_y <- data_tr["dG"]
+
+## Standardize Train and Test data sets
+trainMean <- apply(datatr_x,2,mean) # Test dataset based on Train's mean
+trainSd <- apply(datatr_x,2,sd)  # Test dataset based on Train's standard deviation
+datatr_scaled <- sweep(sweep(datatr_x, 2L, trainMean), 2, trainSd, "/")
+data <- cbind(datatr_y,datatr_scaled )
+
+datatt_y <- data_tt["dG"]
+datatt_scaled <- sweep(sweep(datatt_x, 2L, trainMean), 2, trainSd, "/")
+data_tt <- cbind(datatt_y,datatt_scaled )
 
 
 ## 7. Final Model with Train data set only
@@ -253,7 +253,7 @@ result_q2 = q2(data_train, data_test, fit  ); result_q2
 FINAL_TT_DATA$y_hat = predict(final_model, FINAL_TT_DATA)
 r2_test = round( cor(FINAL_TT_DATA$y_hat, FINAL_TT_DATA$dG)^2, 3); cat('\n R2-Test: ',r2_test)
 
-## TableS21 - Train
+## TableS22 - Train
 solvs_train = all_labels[rownames(FINAL_TR_DATA),"solvent"]
 solvs_test = all_labels[rownames(FINAL_TT_DATA),"solvent"]
 solvs = append(solvs_train, solvs_test); solvs
@@ -266,16 +266,16 @@ Calc_dG_train = round(as.vector(final_model$fitted.values), 2)
 Calc_dG_test = round(FINAL_TT_DATA$y_hat, 2)
 Calc_dGs = append(Calc_dG_train, Calc_dG_test); Calc_dGs
 
-Table_S21_train = tibble(solvs_train, Exp_dG_train, Calc_dG_train); Table_S21_train
-Table_S21_test = tibble(solvs_test, Exp_dG_test, Calc_dG_test); Table_S21_test
+Table_S22_train = tibble(solvs_train, Exp_dG_train, Calc_dG_train); Table_S22_train
+Table_S22_test = tibble(solvs_test, Exp_dG_test, Calc_dG_test); Table_S22_test
 
-mae_dG_train = round(mae(Table_S21_train$Exp_dG_train, Table_S21_train$Calc_dG_train),2) ; mae_dG_train
-sd_dG_train = round(sd(Table_S21_train$Calc_dG_train ),2); sd_dG_train
-mae_dG_test = round(mae(Table_S21_test$Exp_dG_test, Table_S21_test$Calc_dG_test),2) ; mae_dG_test
-sd_dG_test= round(sd(Table_S21_test$Calc_dG_test ),2); sd_dG_test
+mae_dG_train = round(mae(Table_S22_train$Exp_dG_train, Table_S22_train$Calc_dG_train),2) ; mae_dG_train
+sd_dG_train = round(sd(Table_S22_train$Calc_dG_train ),2); sd_dG_train
+mae_dG_test = round(mae(Table_S22_test$Exp_dG_test, Table_S22_test$Calc_dG_test),2) ; mae_dG_test
+sd_dG_test= round(sd(Table_S22_test$Calc_dG_test ),2); sd_dG_test
 
-# write.csv(Table_S21_train[ order(Table_S21_train$Exp_dG_train), ], "TableS21-train.csv")
-# write.csv(Table_S21_test[ order(Table_S21_test$Exp_dG_test), ], "TableS21-test.csv")
+# write.csv(Table_S22_train[ order(Table_S22_train$Exp_dG_train), ], "TableS22-train.csv")
+# write.csv(Table_S22_test[ order(Table_S22_test$Exp_dG_test), ], "TableS22-test.csv")
 
 
 ## (b) k/k' slopes between 0.85 and 1.15 
