@@ -197,7 +197,7 @@ for (i in 5:14) {
   Q2_rmse[[i]] <- signif(result_q2@result[["pred"]][["rmse"]], 2)
 }
 Table_S21 = na.omit(tibble(cluster, formula, R2_train, R2_rmse, Q2_test, Q2_rmse)); Table_S21
-# write.csv(Table_S201 "TableS21.csv", row.names = FALSE)  # save to csv
+# write.csv(Table_S21 "TableS21.csv", row.names = FALSE)  # save to csv
 
 
 # 6. Final analysis based on Best model and Best Train:Test split
