@@ -25,7 +25,7 @@ The descriptors include:
 
 
 ### References:
-1. Luo, C.; Bandar, J. S. Superbase-Catalyzed anti-Markovnikov Al-cohol Addition Reactions to Aryl Alkenes. J. Am. Chem. Soc. 2018, 140, 3547–3550. (https://pubs.acs.org/doi/10.1021/jacs.8b00766)
+1. Luo, C.; Bandar, J. S. Superbase-Catalyzed anti-Markovnikov Alcohol Addition Reactions to Aryl Alkenes. J. Am. Chem. Soc. 2018, 140, 3547–3550. (https://pubs.acs.org/doi/10.1021/jacs.8b00766)
 2. Benazzouz, A.; Moity, L.; Pierlot, C.; Sergent, M.; Molinier, V.; Aubry, J-M. Selection of a greener set of solvents evenly spread in the Hansen space by space-filling design. Ind. Eng. Chem. Res. 2013, 52, 16585–16797. (https://pubs.acs.org/doi/abs/10.1021/ie402410w)
 3. Zissimos, A. M.; Abraham, M. H.; Klamt, A.; Eckert, F.; Wood, J. A Comparison between the two general sets of linear free energy descriptors of Abraham and Klamt. J. Chem. Inf. Comput. Sci. 2002, 42, 1320–1331. (https://pubs.acs.org/doi/10.1021/ci025530o)
 4. Winget, P.; Dolney, D. M.; Giesen, D. J.; Cramer, C. J.; Truhlar, D. G. Minnesota Solvent Descriptor Database. University of Min-nesota, Minneapolis, USA. Version date: July 9, 1999; updated: June 6, 2010. (https://comp.chem.umn.edu/solvation/mnsddb.pdf)
