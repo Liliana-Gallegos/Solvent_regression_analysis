@@ -1,5 +1,5 @@
 # Solvent_regression_analysis
-A repository for the 20 solvents studied experimentally on the base-batalyzed anti-Markovnikov alcohol addition reaction<sup>1</sup>. This study includes a principal component analysis (PCA) to visualize the variation between the molecular descriptors and the prediction of equilibrium yields with a multivariate linear regression model. The dataset includes the measured equilibrium constants and a set of 17 molecular descriptors that capture electronic and structural differences. 
+A repository for the 20 solvents studied experimentally on the base-batalyzed anti-Markovnikov alcohol addition reaction<sup>1</sup>. [See publication here!](https://doi.org/10.1021/jacs.1c13397). This study includes a principal component analysis (PCA) to visualize the variation between the molecular descriptors and the prediction of equilibrium yields with a multivariate linear regression model. The dataset includes the measured equilibrium constants and a set of 17 molecular descriptors that capture electronic and structural differences. 
 
 The descriptors include: 
 * Hansen solubility parameters<sup>2</sup>
